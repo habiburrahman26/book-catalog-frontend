@@ -1,6 +1,9 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useRegistrationMutation } from '../redux/features/auth/authApi';
+import { ErrorApiResponseType, ErrorMessage } from '../types/common';
+import Error from '../components/ui/Error';
 
 type Inputs = {
   email: string;
@@ -14,12 +17,32 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const [registration, { data, isLoading, error: responseError }] =
+    useRegistrationMutation();
+
+  const [error, setError] = useState<ErrorApiResponseType>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (responseError?.data) {
+      setError(responseError?.data);
+    }
+
+    if (data?.data?.email) {
+      navigate('/sign-in');
+    }
+
+    console.log(responseError);
+  }, [data, navigate, responseError]);
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    registration(data);
+  };
 
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-[calc(100vh-10vh)] lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">
+        <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
               Sign Up
@@ -74,9 +97,13 @@ const SignUp = () => {
 
               <button
                 type="submit"
-                className="w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="flex items-center justify-center gap-4 w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                disabled={isLoading}
               >
-                Sign in
+                {isLoading && (
+                  <span className="loading loading-spinner loading-sm text-white"></span>
+                )}
+                <span>Sign Up</span>
               </button>
               <p className="text-sm font-light text-gray-500">
                 Already have an account?{' '}
@@ -89,6 +116,11 @@ const SignUp = () => {
               </p>
             </form>
           </div>
+        </div>
+        <div>
+          {error?.errorMessages && (
+            <Error message={error?.errorMessages?.[0]?.message} />
+          )}
         </div>
       </div>
     </section>
