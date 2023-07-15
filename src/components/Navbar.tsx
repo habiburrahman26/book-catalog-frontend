@@ -30,7 +30,7 @@ const Navbar = () => {
           </li>
           <li></li>
           <li>
-            <a>Item 3</a>
+            <Link to="/add-book">Add New Book</Link>
           </li>
         </ul>
       </div>

@@ -18,11 +18,11 @@ const Book = ({ book }: BookProps) => {
       </figure>
       <div className="card-body p-3">
         <div className="flex items-center justify-between">
-          <span className="badge badge-outline font-medium">{genre}</span>
-          <span className="font-medium">{publicationDate}</span>
+          <span className="badge badge-outline">{genre}</span>
+          <span>{publicationDate}</span>
         </div>
         <h2 className="text-lg font-semibold -mb-2">{title}</h2>
-        <p className="font-medium">{author}</p>
+        <p>{author}</p>
       </div>
     </Link>
   );
