@@ -51,7 +51,6 @@ const Login = () => {
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-4 md:space-y-6"
-              action="#"
             >
               <div>
                 <label
