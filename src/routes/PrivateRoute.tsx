@@ -9,7 +9,7 @@ type PropsType = {
 const PrivateRoute = ({ children }: PropsType) => {
   const isLoggedIn = useAuth();
 
-  return isLoggedIn ? children : <Navigate to="/login" />;
+  return isLoggedIn ? children : <Navigate to="/sign-in" />;
 };
 
 export default PrivateRoute;
