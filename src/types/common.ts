@@ -14,3 +14,20 @@ export type ApiResponseType<T> = {
   message: string;
   data: T;
 };
+
+export type Review = {
+  rating: number;
+  comment: string;
+  userEmail: string;
+};
+
+export type BookType = {
+  _id: string;
+  title: string;
+  author: string;
+  image: string;
+  link: string;
+  publicationDate: number;
+  genre: string;
+  reviews: Review[];
+};

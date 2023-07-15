@@ -4,7 +4,7 @@ const bookApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query({
       query: () => ({
-        url: "get-all-books",
+        url: "get-books",
       }),
     }),
   }),
