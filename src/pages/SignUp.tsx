@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRegistrationMutation } from '../redux/features/auth/authApi';
-import { ErrorApiResponseType, ErrorMessage } from '../types/common';
+import { ErrorApiResponseType } from '../types/common';
 import Error from '../components/ui/Error';
 
 type Inputs = {
@@ -41,7 +41,7 @@ const SignUp = () => {
 
   return (
     <section className="bg-gray-50">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-[calc(100vh-10vh)] lg:py-0">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-[calc(100vh-16vh)] lg:py-0">
         <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">

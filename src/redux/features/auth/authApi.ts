@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import apiSlice from '../../api/apiSlice';
+import { userLoggedIn } from './authSlice';
 
 const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,7 +10,26 @@ const authApi = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    login: builder.mutation({
+      query: (data) => ({
+        url: 'auth/login',
+        method: 'POST',
+        body: data,
+      }),
+
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          const accessToken = data?.data?.accessToken;
+          localStorage.setItem('accessToken', accessToken);
+
+          dispatch(userLoggedIn(accessToken));
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useRegistrationMutation } = authApi;
+export const { useRegistrationMutation, useLoginMutation } = authApi;
