@@ -6,6 +6,7 @@ const bookApi = apiSlice.injectEndpoints({
       query: () => ({
         url: 'get-books',
       }),
+      providesTags: ['books'],
     }),
     getBook: builder.query({
       query: (id) => ({
@@ -18,8 +19,10 @@ const bookApi = apiSlice.injectEndpoints({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['books'],
     }),
   }),
 });
 
-export const { useGetBooksQuery, useGetBookQuery } = bookApi;
+export const { useGetBooksQuery, useGetBookQuery, useAddBookMutation } =
+  bookApi;

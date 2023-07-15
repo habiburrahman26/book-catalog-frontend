@@ -1,10 +1,17 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAddBookMutation } from '../redux/features/book/bookApi';
+import { ErrorApiResponseType } from '../types/common';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import Error from '../components/ui/Error';
 
 type Inputs = {
   title: string;
   author: string;
   image: string;
-  publishedYear: number;
+  publicationDate: number;
+  genre: string;
 };
 
 const AddBook = () => {
@@ -14,8 +21,26 @@ const AddBook = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
+  const [error, setError] = useState<ErrorApiResponseType>();
+  const navigate = useNavigate();
+
+  const [addBook, { data, isLoading, error: responseError }] =
+    useAddBookMutation();
+
+  useEffect(() => {
+    if (responseError?.data) {
+      setError(responseError?.data);
+    }
+
+    if (data?.data?.title) {
+      toast.success('Book added successfully');
+      navigate('/all-books');
+    }
+  }, [data, navigate, responseError]);
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    setError(undefined);
+    addBook(data);
   };
 
   return (
@@ -89,6 +114,26 @@ const AddBook = () => {
 
             <div>
               <label
+                htmlFor="genre"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Genre
+              </label>
+              <input
+                type="text"
+                id="genre"
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                {...register('genre', { required: 'Genre is required' })}
+              />
+              {errors.genre && (
+                <span className="text-xs text-red-500 font-medium">
+                  {errors.genre?.message}
+                </span>
+              )}
+            </div>
+
+            <div>
+              <label
                 htmlFor="publishedYear"
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
@@ -98,13 +143,14 @@ const AddBook = () => {
                 type="number"
                 id="publishedYear"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('publishedYear', {
+                {...register('publicationDate', {
                   required: 'Published Year is required',
+                  valueAsNumber: true,
                 })}
               />
-              {errors.publishedYear && (
+              {errors.publicationDate && (
                 <span className="text-xs text-red-500 font-medium">
-                  {errors.publishedYear?.message}
+                  {errors.publicationDate?.message}
                 </span>
               )}
             </div>
@@ -113,16 +159,18 @@ const AddBook = () => {
               type="submit"
               className="flex items-center justify-center gap-4 w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
             >
-              <span className="loading loading-spinner loading-sm text-white"></span>
+              {isLoading && (
+                <span className="loading loading-spinner loading-sm text-white"></span>
+              )}
               <span>Add Book</span>
             </button>
           </form>
         </div>
       </div>
       <div>
-        {/* {error?.errorMessages && (
+        {error?.errorMessages && (
           <Error message={error?.errorMessages?.[0]?.message} />
-        )} */}
+        )}
       </div>
     </section>
   );

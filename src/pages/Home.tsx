@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import Book from '../components/Book';
 import BookLoader from '../components/loder/BookLoader';
 import Error from '../components/ui/Error';
@@ -28,12 +29,14 @@ const Home = () => {
     content = <Error message="No Book found!" />;
   }
 
+  console.log(books);
+
   if (!isLoading && !isError && books?.data?.length > 0) {
     content = (
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4  2xl:grid-cols-6 justify-items-center gap-5">
-        {books?.data?.slice(0, 10)?.map((b: BookType) => (
-          <Book key={b._id} book={b} />
-        ))}
+        {...books?.data
+          ?.slice(0, 10)
+          ?.map((b: BookType) => <Book key={b._id} book={b} />)}
       </div>
     );
   }
