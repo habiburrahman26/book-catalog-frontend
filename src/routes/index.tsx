@@ -1,13 +1,16 @@
-import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import SignUp from '../pages/SignUp';
-import AllBook from '../pages/AllBook';
+import { createBrowserRouter } from "react-router-dom";
+import App from "../App";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import SignUp from "../pages/SignUp";
+import AllBook from "../pages/AllBook";
+import AddBook from "../pages/AddBook";
+import EditBook from "../pages/EditBook";
+import BookDetails from "../pages/BookDetails";
 
 const routes = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
       {
@@ -15,15 +18,28 @@ const routes = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/all-books',
+        path: "/all-books",
         element: <AllBook />,
       },
       {
-        path: '/sign-in',
+        path: "/book/:bookId",
+        element: <BookDetails />,
+      },
+      {
+        path: "/add-book",
+        element: <AddBook />,
+      },
+      {
+        path: "/edit-book/:bookId",
+        element: <EditBook />,
+      },
+
+      {
+        path: "/sign-in",
         element: <Login />,
       },
       {
-        path: '/sign-up',
+        path: "/sign-up",
         element: <SignUp />,
       },
     ],
