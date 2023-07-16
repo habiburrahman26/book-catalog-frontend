@@ -33,6 +33,13 @@ const bookApi = apiSlice.injectEndpoints({
         { type: "book", id: arg.id },
       ],
     }),
+    deleteBook: builder.mutation({
+      query: (id) => ({
+        url: `delete-book/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["books"],
+    }),
   }),
 });
 
