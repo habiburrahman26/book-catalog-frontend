@@ -1,15 +1,27 @@
-import { useState } from "react";
-import Book from "../components/Book";
-import BookLoader from "../components/loder/BookLoader";
-import Error from "../components/ui/Error";
-import { useGetBooksQuery } from "../redux/features/book/bookApi";
-import { BookType } from "../types/common";
-
-// get-books?title=zero&author=alissa&genre=fiction&publicationDate=2023&genres=novel,fiction
+import { useState } from 'react';
+import Book from '../components/Book';
+import BookLoader from '../components/loder/BookLoader';
+import Error from '../components/ui/Error';
+import { useGetBooksWithFilterQuery } from '../redux/features/book/bookApi';
+import { BookType } from '../types/common';
+import useGetGenreAndYear from '../hooks/useGetGenreAndYear';
+import Select from 'react-select';
+// get-books?search=novel&publicationDate=2023&genres=novel,fiction
 
 const AllBook = () => {
-  const [searchInput, setSearchInput] = useState<string>("");
-  const { data: books, isLoading, isError } = useGetBooksQuery(undefined);
+  const [search, setSearch] = useState<string>('');
+  const {
+    bookGenre,
+    publicationYear,
+    isLoading: filterOptionLoading,
+  } = useGetGenreAndYear();
+
+  //! get all books
+  const {
+    data: books,
+    isLoading,
+    isError,
+  } = useGetBooksWithFilterQuery({ search });
 
   let content = null;
 
@@ -42,16 +54,29 @@ const AllBook = () => {
     );
   }
 
+  const selectStyles = {
+    control: (base, state) => ({
+      ...base,
+      width: '100%',
+      padding: '4px',
+      fontSize: '14px',
+      borderRadius: '8px',
+      backgroundColor: 'rgb(249 250 251)',
+      border: '1px solid rgb(209 213 219)',
+      '&:hover': {
+        boxShadow: '0 0 0 #f5f5f5',
+      },
+      '&:focus': {
+        boxShadow: 'none',
+      },
+      borderColor: state.isFocused ? 'none' : 'rgb(209 213 219)',
+    }),
+  };
+
   return (
     <section className="pt-10 px-4 min-h-[calc(100vh-15vh)]">
-      <div className="pb-5 w-2/5 mx-auto">
-        <form>
-          <label
-            htmlFor="default-search"
-            className="mb-2 text-sm font-medium text-gray-900 sr-only "
-          >
-            Search
-          </label>
+      <div className="flex justify-center gap-4 px-24">
+        <div className="basis-2/6 pb-5">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
@@ -73,17 +98,30 @@ const AllBook = () => {
             <input
               type="search"
               id="default-search"
-              className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search title, author, or genre"
+              required
+              onChange={(e) => setSearch(e.target.value)}
             />
-            <button
-              type="submit"
-              className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-            >
-              Search
-            </button>
           </div>
-        </form>
+        </div>
+        <div className="basis-[25%]">
+          <Select
+            options={bookGenre}
+            isMulti
+            isLoading={filterOptionLoading}
+            styles={selectStyles}
+            placeholder="Filter By Genre"
+          />
+        </div>
+        <div className="basis-[15%]">
+          <Select
+            options={publicationYear}
+            isLoading={filterOptionLoading}
+            styles={selectStyles}
+            placeholder="Filter By Year"
+          />
+        </div>
       </div>
       {content}
     </section>
