@@ -1,10 +1,10 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAddBookMutation } from '../redux/features/book/bookApi';
-import { ErrorApiResponseType } from '../types/common';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import Error from '../components/ui/Error';
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useAddBookMutation } from "../redux/features/book/bookApi";
+import { ErrorApiResponseType } from "../types/common";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import Error from "../components/ui/Error";
 
 type Inputs = {
   title: string;
@@ -33,8 +33,8 @@ const AddBook = () => {
     }
 
     if (data?.data?.title) {
-      toast.success('Book added successfully');
-      navigate('/all-books');
+      toast.success("Book added successfully");
+      navigate("/all-books");
     }
   }, [data, navigate, responseError]);
 
@@ -44,7 +44,7 @@ const AddBook = () => {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-[calc(100vh-12vh)] lg:py-0">
+    <section className="flex flex-col items-center justify-center px-6 pt-10 min-h-[calc(100vh-12vh)] mx-auto ">
       <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
@@ -65,7 +65,7 @@ const AddBook = () => {
                 type="text"
                 id="title"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('title', { required: 'Title is required' })}
+                {...register("title", { required: "Title is required" })}
               />
               {errors.title && (
                 <span className="text-xs text-red-500 font-medium">
@@ -84,7 +84,7 @@ const AddBook = () => {
                 type="text"
                 id="author"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('author', { required: 'Author is required' })}
+                {...register("author", { required: "Author is required" })}
               />
               {errors.author && (
                 <span className="text-xs text-red-500 font-medium">
@@ -103,7 +103,7 @@ const AddBook = () => {
                 type="url"
                 id="image"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('image', { required: 'Image is required' })}
+                {...register("image", { required: "Image is required" })}
               />
               {errors.image && (
                 <span className="text-xs text-red-500 font-medium">
@@ -123,7 +123,7 @@ const AddBook = () => {
                 type="text"
                 id="genre"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('genre', { required: 'Genre is required' })}
+                {...register("genre", { required: "Genre is required" })}
               />
               {errors.genre && (
                 <span className="text-xs text-red-500 font-medium">
@@ -143,8 +143,8 @@ const AddBook = () => {
                 type="number"
                 id="publishedYear"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('publicationDate', {
-                  required: 'Published Year is required',
+                {...register("publicationDate", {
+                  required: "Published Year is required",
                   valueAsNumber: true,
                 })}
               />

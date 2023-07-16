@@ -1,7 +1,7 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../redux/hook';
-import { userLoggedOut } from '../redux/features/auth/authSlice';
-import useAuth from '../hooks/useAuth';
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../redux/hook";
+import { userLoggedOut } from "../redux/features/auth/authSlice";
+import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
   const isLoggedIn = useAuth();
@@ -12,7 +12,7 @@ const Navbar = () => {
   const signOut = () => {
     localStorage.clear();
     dispatch(userLoggedOut());
-    navigate('/');
+    navigate("/");
     // window.location.href = '/';
   };
 
@@ -29,9 +29,11 @@ const Navbar = () => {
             <NavLink to="/all-books">All Books</NavLink>
           </li>
           <li></li>
-          <li>
-            <Link to="/add-book">Add New Book</Link>
-          </li>
+          {isLoggedIn && (
+            <li>
+              <Link to="/add-book">Add New Book</Link>
+            </li>
+          )}
         </ul>
       </div>
 
