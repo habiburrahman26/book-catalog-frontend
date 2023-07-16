@@ -29,8 +29,6 @@ const Home = () => {
     content = <Error message="No Book found!" />;
   }
 
-  console.log(books);
-
   if (!isLoading && !isError && books?.data?.length > 0) {
     content = (
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4  2xl:grid-cols-6 justify-items-center gap-5">

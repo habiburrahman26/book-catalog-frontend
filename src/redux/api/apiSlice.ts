@@ -14,7 +14,7 @@ const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes:['books','book'],
+  tagTypes:['books','book','wishlist'],
   endpoints: () => ({}),
 });
 

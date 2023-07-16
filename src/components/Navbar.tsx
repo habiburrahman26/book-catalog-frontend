@@ -28,7 +28,6 @@ const Navbar = () => {
           <li>
             <NavLink to="/all-books">All Books</NavLink>
           </li>
-          <li></li>
           {isLoggedIn && (
             <li>
               <NavLink to="/add-book">Add New Book</NavLink>
