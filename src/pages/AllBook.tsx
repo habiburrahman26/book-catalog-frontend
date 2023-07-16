@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import Book from '../components/Book';
 import BookLoader from '../components/loder/BookLoader';
@@ -6,10 +7,30 @@ import { useGetBooksWithFilterQuery } from '../redux/features/book/bookApi';
 import { BookType } from '../types/common';
 import useGetGenreAndYear from '../hooks/useGetGenreAndYear';
 import Select from 'react-select';
+
 // get-books?search=novel&publicationDate=2023&genres=novel,fiction
 
 const AllBook = () => {
   const [search, setSearch] = useState<string>('');
+  const [genres, setGenre] = useState<Array<string>>([]);
+  const [year, setYear] = useState<number>();
+
+  const handleGenreChange = (selectedOption: any) => {
+    if (selectedOption) {
+      setGenre(selectedOption.map((g: any) => g.value).join(','));
+    } else {
+      setGenre([]);
+    }
+  };
+
+  const handleYearChange = (selectedOption: any) => {
+    if (selectedOption) {
+      setYear(selectedOption.value);
+    } else {
+      setYear(0);
+    }
+  };
+
   const {
     bookGenre,
     publicationYear,
@@ -21,7 +42,7 @@ const AllBook = () => {
     data: books,
     isLoading,
     isError,
-  } = useGetBooksWithFilterQuery({ search });
+  } = useGetBooksWithFilterQuery({ search, genres, publicationDate: year });
 
   let content = null;
 
@@ -99,7 +120,7 @@ const AllBook = () => {
               type="search"
               id="default-search"
               className="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search title, author, or genre"
+              placeholder="Search by title, author, or genre"
               required
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -109,17 +130,21 @@ const AllBook = () => {
           <Select
             options={bookGenre}
             isMulti
+            isClearable
             isLoading={filterOptionLoading}
             styles={selectStyles}
             placeholder="Filter By Genre"
+            onChange={handleGenreChange}
           />
         </div>
         <div className="basis-[15%]">
           <Select
             options={publicationYear}
+            isClearable
             isLoading={filterOptionLoading}
             styles={selectStyles}
             placeholder="Filter By Year"
+            onChange={handleYearChange}
           />
         </div>
       </div>

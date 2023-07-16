@@ -10,7 +10,9 @@ const bookApi = apiSlice.injectEndpoints({
     }),
     getBooksWithFilter: builder.query({
       query: (options) => ({
-        url: `get-books?search=${options?.search}`,
+        url: `get-books?search=${options?.search}&genres=${
+          options?.genres || ''
+        }&publicationDate=${options?.publicationDate || ''}`,
       }),
       providesTags: ['books'],
     }),
