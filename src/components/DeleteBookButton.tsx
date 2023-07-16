@@ -1,4 +1,4 @@
-import { useDeleteFromWishlistMutation } from "../redux/features/wishlist/wishlistApi";
+import { useDeleteFromWishlistMutation } from '../redux/features/wishlist/wishlistApi';
 
 const DeleteBookButton = ({ id }: { id: string }) => {
   const [deleteFromWishlist, { isLoading: removeWishlistLoading }] =
@@ -8,7 +8,7 @@ const DeleteBookButton = ({ id }: { id: string }) => {
     <div>
       <button
         title="add to wishlist"
-        className="tooltip text-xs flex items-center gap-2 btn  btn-sm btn-circle btn-outline btn-error absolute bottom-5 right-2"
+        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xs flex items-center gap-2 btn  btn-sm btn-circle btn-ghost bg-gray-400 absolute top-5 right-4"
         onClick={() => deleteFromWishlist(id)}
         disabled={removeWishlistLoading}
       >

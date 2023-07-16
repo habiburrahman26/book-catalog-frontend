@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { BookType } from "../types/common";
-import { useAddToWishlistMutation } from "../redux/features/wishlist/wishlistApi";
-import { useEffect } from "react";
-import { toast } from "react-hot-toast";
+import { Link } from 'react-router-dom';
+import { BookType } from '../types/common';
+import { useAddToWishlistMutation } from '../redux/features/wishlist/wishlistApi';
+import { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 type BookProps = {
   book: BookType;
@@ -25,7 +25,7 @@ const Book = ({ book }: BookProps) => {
   }, [data, error]);
 
   return (
-    <div className="card w-full bg-base-100 shadow-md hover:shadow-none hover:ring-2 transition-all p-2 relative">
+    <div className="card w-full bg-base-100 shadow-md hover:shadow-none hover:ring-2 transition-all p-2 relative group">
       <figure>
         <img src={image} alt={title} className="h-60 w-full" />
       </figure>
@@ -45,7 +45,7 @@ const Book = ({ book }: BookProps) => {
 
       <button
         title="add to wishlist"
-        className="tooltip text-xs flex items-center gap-2 btn  btn-xs btn-circle btn-outline absolute bottom-5 right-2"
+        className=" opacity-0 group-hover:opacity-100 transition-opacity duration-300text-xs flex items-center gap-2 btn  btn-sm btn-circle bg-gray-50 absolute top-5 right-4"
         onClick={() => addToWishlist({ bookId: _id })}
         disabled={isLoading}
       >

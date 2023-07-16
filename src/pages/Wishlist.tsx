@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
-import BookLoader from "../components/loder/BookLoader";
-import Error from "../components/ui/Error";
-import { useGetWishlistQuery } from "../redux/features/wishlist/wishlistApi";
-import { BookType } from "../types/common";
-import DeleteBookButton from "../components/DeleteBookButton";
+import { Link } from 'react-router-dom';
+import BookLoader from '../components/loder/BookLoader';
+import Error from '../components/ui/Error';
+import { useGetWishlistQuery } from '../redux/features/wishlist/wishlistApi';
+import { BookType } from '../types/common';
+import DeleteBookButton from '../components/DeleteBookButton';
 
 const Wishlist = () => {
   const {
@@ -36,10 +36,10 @@ const Wishlist = () => {
   if (!isLoading && !isError && wishlists?.data?.length > 0) {
     content = (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4  2xl:grid-cols-6 justify-items-center gap-5">
-        {...wishlists?.data?.map((b: { bookId: BookType }) => (
+        {...wishlists?.data?.map((b: { _id: string; bookId: BookType }) => (
           <div
             key={b.bookId._id}
-            className="card w-full bg-base-100 shadow-md hover:shadow-none hover:ring-2 transition-all p-2 relative"
+            className="card w-full bg-base-100 shadow-md hover:shadow-none hover:ring-2 transition-all p-2 relative group"
           >
             <figure>
               <img
@@ -62,7 +62,7 @@ const Wishlist = () => {
               <p>{b.bookId.author}</p>
             </div>
 
-            <DeleteBookButton id={b.bookId._id} />
+            <DeleteBookButton id={b?._id} />
           </div>
         ))}
       </div>
