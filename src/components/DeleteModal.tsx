@@ -1,13 +1,38 @@
 import toast from "react-hot-toast";
 import { createPortal } from "react-dom";
+import { useDeleteBookMutation } from "../redux/features/book/bookApi";
+import { useEffect, useState } from "react";
+import { ErrorApiResponseType } from "../types/common";
+import { useNavigate } from "react-router-dom";
+import Error from "./ui/Error";
 
 type PropsType = {
-  handleModal: () => void;
+  id: string;
   title: string;
   isOpen?: boolean;
+  handleModal: () => void;
 };
 
-const DeleteModalOverlay = ({ handleModal, title }: PropsType) => {
+const DeleteModalOverlay = ({ id, title, handleModal }: PropsType) => {
+  const [error, setError] = useState<ErrorApiResponseType>();
+  const navigate = useNavigate();
+
+  //! delete book
+  const [deleteBook, { data, isLoading, error: responseError }] =
+    useDeleteBookMutation();
+
+  useEffect(() => {
+    if (responseError?.data) {
+      setError(responseError?.data);
+    }
+
+    if (data?.data?._id) {
+      toast.success("Book deleted successfully");
+      handleModal();
+      navigate("/all-books");
+    }
+  }, [data, responseError, navigate,handleModal]);
+
   return (
     <div
       className="relative z-[1000]"
@@ -49,8 +74,11 @@ const DeleteModalOverlay = ({ handleModal, title }: PropsType) => {
                     <p className="text-sm xl:text-base text-gray-500">
                       Are you sure you want to delete{" "}
                       <span className="text-primary font-medium">{title} </span>
-                      ? All of your data will be permanently removed.
+                      ? Your data will be permanently removed.
                     </p>
+                    {error && (
+                      <Error message={error?.errorMessages?.[0]?.message} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -58,9 +86,13 @@ const DeleteModalOverlay = ({ handleModal, title }: PropsType) => {
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 type="button"
+                onClick={() => deleteBook(id)}
                 className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
               >
-                Delete
+                {isLoading && (
+                  <span className="loading loading-spinner loading-sm text-white"></span>
+                )}
+                <span>Delete</span>
               </button>
               <button
                 type="button"
@@ -78,10 +110,10 @@ const DeleteModalOverlay = ({ handleModal, title }: PropsType) => {
 };
 
 //create portal
-const DeleteModal = ({ isOpen, handleModal, title }: PropsType) => {
+const DeleteModal = ({ id, title, isOpen, handleModal }: PropsType) => {
   return isOpen
     ? createPortal(
-        <DeleteModalOverlay handleModal={handleModal} title={title} />,
+        <DeleteModalOverlay id={id} title={title} handleModal={handleModal} />,
         document.getElementById("modal-overlay") as HTMLElement
       )
     : null;

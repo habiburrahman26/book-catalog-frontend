@@ -179,6 +179,7 @@ const BookDetails = () => {
         isOpen={openDeleteModal}
         handleModal={handleDeleteModal}
         title={book?.data?.title}
+        id={bookId}
       />
     </section>
   );
