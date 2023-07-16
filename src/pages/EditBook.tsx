@@ -1,10 +1,14 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAddBookMutation } from '../redux/features/book/bookApi';
-import { ErrorApiResponseType } from '../types/common';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import Error from '../components/ui/Error';
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  useGetBookQuery,
+  useEditBookMutation,
+} from "../redux/features/book/bookApi";
+import { ErrorApiResponseType } from "../types/common";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import Error from "../components/ui/Error";
+import LoadingSpinner from "../components/loder/LoadingSpinner";
 
 type Inputs = {
   title: string;
@@ -15,32 +19,58 @@ type Inputs = {
 };
 
 const EditBook = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
-
+  const { bookId } = useParams();
   const [error, setError] = useState<ErrorApiResponseType>();
   const navigate = useNavigate();
 
-  const [addBook, { data, isLoading, error: responseError }] =
-    useAddBookMutation();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  //! get book
+  const { data: book, isLoading, isError } = useGetBookQuery(bookId);
+
+  //! edit book
+  const [
+    editBook,
+    { data: editBookData, isLoading: editLoading, error: editResponseError },
+  ] = useEditBookMutation();
 
   useEffect(() => {
-    if (responseError?.data) {
-      setError(responseError?.data);
+    if (editResponseError?.data) {
+      setError(editResponseError?.data);
     }
 
-    if (data?.data?.title) {
-      toast.success('Book added successfully');
-      navigate('/all-books');
+    if (editBookData?.data?.title) {
+      toast.success("Book edit successfully");
+      navigate("/all-books");
     }
-  }, [data, navigate, responseError]);
+  }, [editBookData, navigate, editResponseError]);
+
+  useEffect(() => {
+    if (book) {
+      setValue("title", book?.data?.title);
+      setValue("author", book?.data?.author);
+      setValue("image", book?.data?.image);
+      setValue("genre", book?.data?.genre);
+      setValue("publicationDate", book?.data?.publicationDate);
+    }
+  }, [book, setValue]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return <Error message="Something went wrong!" />;
+  }
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     setError(undefined);
-    addBook(data);
+    editBook({ id: bookId, data });
   };
 
   return (
@@ -65,7 +95,7 @@ const EditBook = () => {
                 type="text"
                 id="title"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('title', { required: 'Title is required' })}
+                {...register("title", { required: "Title is required" })}
               />
               {errors.title && (
                 <span className="text-xs text-red-500 font-medium">
@@ -84,7 +114,7 @@ const EditBook = () => {
                 type="text"
                 id="author"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('author', { required: 'Author is required' })}
+                {...register("author", { required: "Author is required" })}
               />
               {errors.author && (
                 <span className="text-xs text-red-500 font-medium">
@@ -103,7 +133,7 @@ const EditBook = () => {
                 type="url"
                 id="image"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('image', { required: 'Image is required' })}
+                {...register("image", { required: "Image is required" })}
               />
               {errors.image && (
                 <span className="text-xs text-red-500 font-medium">
@@ -123,7 +153,7 @@ const EditBook = () => {
                 type="text"
                 id="genre"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('genre', { required: 'Genre is required' })}
+                {...register("genre", { required: "Genre is required" })}
               />
               {errors.genre && (
                 <span className="text-xs text-red-500 font-medium">
@@ -143,8 +173,8 @@ const EditBook = () => {
                 type="number"
                 id="publishedYear"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                {...register('publicationDate', {
-                  required: 'Published Year is required',
+                {...register("publicationDate", {
+                  required: "Published Year is required",
                   valueAsNumber: true,
                 })}
               />
@@ -159,10 +189,10 @@ const EditBook = () => {
               type="submit"
               className="flex items-center justify-center gap-4 w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
             >
-              {isLoading && (
+              {editLoading && (
                 <span className="loading loading-spinner loading-sm text-white"></span>
               )}
-              <span>Add Book</span>
+              <span>Update</span>
             </button>
           </form>
         </div>

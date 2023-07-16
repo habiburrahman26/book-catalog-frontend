@@ -12,6 +12,7 @@ const bookApi = apiSlice.injectEndpoints({
       query: (id) => ({
         url: `get-book/${id}`,
       }),
+      providesTags: (_result, _error, arg) => [{ type: "book", id: arg }],
     }),
     addBook: builder.mutation({
       query: (data) => ({
@@ -23,11 +24,14 @@ const bookApi = apiSlice.injectEndpoints({
     }),
     editBook: builder.mutation({
       query: ({ id, data }) => ({
-        url: `edit-book/${id}`,
+        url: `update-book/${id}`,
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["books"],
+      invalidatesTags: (_result, _error, arg) => [
+        "books",
+        { type: "book", id: arg.id },
+      ],
     }),
   }),
 });
