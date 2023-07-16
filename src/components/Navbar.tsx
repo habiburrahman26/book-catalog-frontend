@@ -34,6 +34,11 @@ const Navbar = () => {
               <NavLink to="/add-book">Add New Book</NavLink>
             </li>
           )}
+          {isLoggedIn && (
+            <li>
+              <NavLink to="/wishlist">Wish List</NavLink>
+            </li>
+          )}
         </ul>
       </div>
 
