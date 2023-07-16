@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   useLoginMutation,
-  useRegistrationMutation,
 } from "../redux/features/auth/authApi";
 import { ErrorApiResponseType } from "../types/common";
 import Error from "../components/ui/Error";
@@ -26,7 +25,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (responseError?.data) {
+    if (responseError) {
       setError(responseError?.data);
     }
 

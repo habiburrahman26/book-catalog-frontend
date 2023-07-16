@@ -8,8 +8,6 @@ import { BookType } from '../types/common';
 import useGetGenreAndYear from '../hooks/useGetGenreAndYear';
 import Select from 'react-select';
 
-// get-books?search=novel&publicationDate=2023&genres=novel,fiction
-
 const AllBook = () => {
   const [search, setSearch] = useState<string>('');
   const [genres, setGenre] = useState<Array<string>>([]);
@@ -76,7 +74,7 @@ const AllBook = () => {
   }
 
   const selectStyles = {
-    control: (base, state) => ({
+    control: (base: any, state: any) => ({
       ...base,
       width: '100%',
       padding: '4px',

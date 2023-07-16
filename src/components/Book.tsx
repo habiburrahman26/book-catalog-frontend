@@ -16,7 +16,9 @@ const Book = ({ book }: BookProps) => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error?.data?.message);
+      if ('data' in error) {
+        toast.error(error?.data?.message);
+      }
     }
 
     if (data) {
