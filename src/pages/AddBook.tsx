@@ -34,7 +34,7 @@ const AddBook = () => {
 
     if (data?.data?.title) {
       toast.success("Book added successfully");
-      navigate("/all-books");
+      navigate("/");
     }
   }, [data, navigate, responseError]);
 

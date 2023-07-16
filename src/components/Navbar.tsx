@@ -31,7 +31,7 @@ const Navbar = () => {
           <li></li>
           {isLoggedIn && (
             <li>
-              <Link to="/add-book">Add New Book</Link>
+              <NavLink to="/add-book">Add New Book</NavLink>
             </li>
           )}
         </ul>

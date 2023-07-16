@@ -1,13 +1,22 @@
-import { Link, useParams } from 'react-router-dom';
-import { useGetBookQuery } from '../redux/features/book/bookApi';
-import BookDetailsLoader from '../components/loder/BookDetailsLoader';
-import Error from '../components/ui/Error';
-import { Review } from '../types/common';
-import useAuth from '../hooks/useAuth';
+import { Link, useParams } from "react-router-dom";
+import { useGetBookQuery } from "../redux/features/book/bookApi";
+import BookDetailsLoader from "../components/loder/BookDetailsLoader";
+import Error from "../components/ui/Error";
+import { Review } from "../types/common";
+import useAuth from "../hooks/useAuth";
+import { useState } from "react";
+import DeleteModal from "../components/DeleteModal";
 
 const BookDetails = () => {
   const isLoggedIn = useAuth();
   const { bookId } = useParams();
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+
+  const handleDeleteModal = () => {
+    setOpenDeleteModal((prevState) => !prevState);
+  };
+
+  //! get book data
   const { data: book, isLoading, isError } = useGetBookQuery(bookId);
 
   let content = null;
@@ -37,11 +46,11 @@ const BookDetails = () => {
               {book?.data?.title}
             </p>
             <p className="pb-3">
-              <span className="text-base">Author:</span>{' '}
+              <span className="text-base">Author:</span>{" "}
               <span>{book?.data?.author}</span>
             </p>
             <p>
-              <span className="text-base">Publication Date:</span>{' '}
+              <span className="text-base">Publication Date:</span>{" "}
               <span>{book?.data?.publicationDate}</span>
             </p>
 
@@ -68,7 +77,11 @@ const BookDetails = () => {
                   </svg>
                   <span>Edit</span>
                 </Link>
-                <button className="flex items-center gap-2 btn btn-xs btn-outline border-[#F24C3D]">
+                <button
+                  type="button"
+                  onClick={handleDeleteModal}
+                  className="flex items-center gap-2 btn btn-xs btn-outline border-[#F24C3D]"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -107,7 +120,10 @@ const BookDetails = () => {
             {!isLoggedIn && (
               <div>
                 <span>Please login to write review</span>
-                <Link to="/sign-in" className=" btn btn-primary btn-outline btn-sm ml-4 rounded">
+                <Link
+                  to="/sign-in"
+                  className=" btn btn-primary btn-outline btn-sm ml-4 rounded"
+                >
                   Sign In
                 </Link>
               </div>
@@ -157,7 +173,14 @@ const BookDetails = () => {
   }
 
   return (
-    <section className="pt-10 px-4 min-h-[calc(100vh-15vh)]">{content}</section>
+    <section className="pt-10 px-4 min-h-[calc(100vh-15vh)]">
+      {content}{" "}
+      <DeleteModal
+        isOpen={openDeleteModal}
+        handleModal={handleDeleteModal}
+        title={book?.data?.title}
+      />
+    </section>
   );
 };
 

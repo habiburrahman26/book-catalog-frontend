@@ -45,7 +45,7 @@ const EditBook = () => {
     }
 
     if (editBookData?.data?.title) {
-      toast.success("Book edit successfully");
+      toast.success("Book updated successfully");
       navigate("/all-books");
     }
   }, [editBookData, navigate, editResponseError]);
