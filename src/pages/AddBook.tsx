@@ -158,6 +158,7 @@ const AddBook = () => {
             <button
               type="submit"
               className="flex items-center justify-center gap-4 w-full text-white bg-primary hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
+              disabled={isLoading}
             >
               {isLoading && (
                 <span className="loading loading-spinner loading-sm text-white"></span>

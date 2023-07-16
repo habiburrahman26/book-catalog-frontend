@@ -6,14 +6,20 @@ import { Review } from "../types/common";
 import useAuth from "../hooks/useAuth";
 import { useState } from "react";
 import DeleteModal from "../components/DeleteModal";
+import AddReviewForm from "../components/AddReviewForm";
 
 const BookDetails = () => {
   const isLoggedIn = useAuth();
   const { bookId } = useParams();
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [showAddReviewForm, setShowAddReviewForm] = useState<boolean>(false);
 
   const handleDeleteModal = () => {
     setOpenDeleteModal((prevState) => !prevState);
+  };
+
+  const handleShowAddReviewForm = () => {
+    setShowAddReviewForm((prevState) => !prevState);
   };
 
   //! get book data
@@ -47,7 +53,7 @@ const BookDetails = () => {
             </p>
             <p className="pb-3">
               <span className="text-base">Author:</span>{" "}
-              <span>{book?.data?.author}</span>
+              <span className="text-blue-500">{book?.data?.author}</span>
             </p>
             <p>
               <span className="text-base">Publication Date:</span>{" "}
@@ -112,6 +118,7 @@ const BookDetails = () => {
               <button
                 type="button"
                 className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2 mr-2 mb-2"
+                onClick={handleShowAddReviewForm}
               >
                 Add Review
               </button>
@@ -130,42 +137,53 @@ const BookDetails = () => {
             )}
           </div>
 
-          {book?.data?.reviews.length > 0 &&
-            book?.data?.reviews.map((review: Review) => (
-              <div key={review.userEmail} className="pb-5">
-                <div className="flex items-center gap-3">
-                  <div className="avatar placeholder">
-                    <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
-                      <span className="text-sm">
-                        {review.userEmail.slice(0, 1).toLocaleUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <p>{review.userEmail}</p>
-                    <div className="flex items-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="#F2BE22"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="#F2BE22"
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                        />
-                      </svg>
+          {/* add review Form */}
+          {showAddReviewForm && (
+            <AddReviewForm
+              bookId={book?.data?._id}
+              handleShowAddReviewForm={handleShowAddReviewForm}
+            />
+          )}
 
-                      <span>{review.rating}</span>
+          <div>
+            {book?.data?.reviews.length > 0 &&
+              book?.data?.reviews.map((review: Review) => (
+                <div key={review.userEmail} className="pb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="avatar placeholder">
+                      <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
+                        <span className="text-sm">
+                          {review.userEmail.slice(0, 1).toLocaleUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <p>{review.userEmail}</p>
+                      <div className="flex items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="#F2BE22"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="#F2BE22"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                          />
+                        </svg>
+
+                        <span>{review.rating}</span>
+                      </div>
                     </div>
                   </div>
+                  <p className="pt-1">{review.comment}</p>
                 </div>
-                <p className="pt-1">{review.comment}</p>
-              </div>
-            ))}
+              ))}
+          </div>
+
           {book?.data?.reviews.length === 0 && <p>No review found!</p>}
         </div>
       </div>
@@ -179,7 +197,7 @@ const BookDetails = () => {
         isOpen={openDeleteModal}
         handleModal={handleDeleteModal}
         title={book?.data?.title}
-        id={bookId}
+        id={book?.data?._id}
       />
     </section>
   );
