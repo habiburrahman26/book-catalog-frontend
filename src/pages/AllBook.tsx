@@ -1,10 +1,14 @@
+import { useState } from "react";
 import Book from "../components/Book";
 import BookLoader from "../components/loder/BookLoader";
 import Error from "../components/ui/Error";
 import { useGetBooksQuery } from "../redux/features/book/bookApi";
 import { BookType } from "../types/common";
 
+// get-books?title=zero&author=alissa&genre=fiction&publicationDate=2023&genres=novel,fiction
+
 const AllBook = () => {
+  const [searchInput, setSearchInput] = useState<string>("");
   const { data: books, isLoading, isError } = useGetBooksQuery(undefined);
 
   let content = null;

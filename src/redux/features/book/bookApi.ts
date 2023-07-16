@@ -3,8 +3,8 @@ import apiSlice from "../../api/apiSlice";
 const bookApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: () => ({
-        url: "get-books",
+      query: (options) => ({
+        url: `get-books?${options}`,
       }),
       providesTags: ["books"],
     }),
@@ -48,5 +48,5 @@ export const {
   useGetBookQuery,
   useAddBookMutation,
   useEditBookMutation,
-  useDeleteBookMutation
+  useDeleteBookMutation,
 } = bookApi;

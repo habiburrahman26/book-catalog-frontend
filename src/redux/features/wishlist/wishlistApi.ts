@@ -6,7 +6,7 @@ const wishlistApi = apiSlice.injectEndpoints({
       query: () => ({
         url: "get-all-wishlist",
       }),
-      providesTags: ["wishlist"],
+      providesTags: ["wishlists"],
     }),
     addToWishlist: builder.mutation({
       query: (data) => ({
@@ -14,13 +14,14 @@ const wishlistApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["wishlist"],
+      invalidatesTags: ["wishlists"],
     }),
     deleteFromWishlist: builder.mutation({
       query: (id) => ({
         url: `delete-from-wishlist/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["wishlists"],
     }),
   }),
 });

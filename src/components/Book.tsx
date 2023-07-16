@@ -47,6 +47,7 @@ const Book = ({ book }: BookProps) => {
         title="add to wishlist"
         className="tooltip text-xs flex items-center gap-2 btn  btn-xs btn-circle btn-outline absolute bottom-5 right-2"
         onClick={() => addToWishlist({ bookId: _id })}
+        disabled={isLoading}
       >
         {!isLoading && (
           <svg
